@@ -138,69 +138,84 @@
         </div>
 
         <div class="calendar" style="background-color: #ffc107; padding: 10px; border-radius: 10px; width: 30%; margin-left: 20px;">
-            <h3 style="font-size: 20px; font-weight: bold;">Calendar</h3>
-            <div class="row">
-                <div class="col-12">
-                    <table class="table table-bordered text-center">
-                        <thead>
-                            <tr>
-                                <th>Mon</th>
-                                <th>Tue</th>
-                                <th>Wed</th>
-                                <th>Thu</th>
-                                <th>Fri</th>
-                                <th>Sat</th>
-                                <th>Sun</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>2</td>
-                                <td>3</td>
-                                <td>4</td>
-                                <td>5</td>
-                                <td>6</td>
-                                <td>7</td>
-                            </tr>
-                            <tr>
-                                <td>8</td>
-                                <td>10</td>
-                                <td>11</td>
-                                <td>12</td>
-                                <td>13</td>
-                                <td>14</td>
-                                <td>15</td>
-                            </tr>
-                            <tr>
-                                <td>16</td>
-                                <td>17</td>
-                                <td>18</td>
-                                <td>19</td>
-                                <td>20</td>
-                                <td>21</td>
-                                <td>22</td>
-                            </tr>
-                            <tr>
-                                <td>23</td>
-                                <td>24</td>
-                                <td>25</td>
-                                <td>26</td>
-                                <td>27</td>
-                                <td>28</td>
-                                <td>29</td>
-                            </tr>
-                            <tr>
-                                <td>30</td>
-                                <td>31</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        </tbody>
-                    </table>
+            @php
+                $defaultDate = Carbon\Carbon::now('Asia/Manila');
+                $requestedDate = request('date') ? Carbon\Carbon::parse(request('date')) : $defaultDate;
+                $today = Carbon\Carbon::now('Asia/Manila')->day;
+            @endphp
+
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <a href="?date={{ $requestedDate->copy()->subMonth()->format('Y-m') }}" class="btn btn-sm btn-light">&lt;</a>
+                <h3 style="font-size: 18px; font-weight: bold; margin-bottom: 0;">
+                    {{ $requestedDate->format('F Y') }}
+                </h3>
+                <a href="?date={{ $requestedDate->copy()->addMonth()->format('Y-m') }}" class="btn btn-sm btn-light">&gt;</a>
+            </div>
+            
+            <table class="table table-bordered table-sm text-center">
+                <thead>
+                    <tr>
+                        <th>M</th>
+                        <th>T</th>
+                        <th>W</th>
+                        <th>T</th>
+                        <th>F</th>
+                        <th>S</th>
+                        <th>S</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @php
+                        $date = $requestedDate->copy()->startOfMonth();
+                        $daysInMonth = $date->daysInMonth;
+                        $firstDayOfWeek = $date->dayOfWeek;
+                        $firstDayOfWeek = $firstDayOfWeek == 0 ? 7 : $firstDayOfWeek;
+                    @endphp
+
+                    <tr>
+                        @for ($i = 1; $i < $firstDayOfWeek; $i++)
+                            <td></td>
+                        @endfor
+
+                        @for ($day = 1; $day <= $daysInMonth; $day++)
+                            @if ($firstDayOfWeek > 7)
+                                </tr><tr>
+                                @php $firstDayOfWeek = 1 @endphp
+                            @endif
+
+                            <td style="@if($day == $today && $requestedDate->format('Y-m') == $defaultDate->format('Y-m')) background-color: #fff3cd; font-weight: bold; 
+                                       @elseif(isset($holidays[sprintf('%02d-%02d', $requestedDate->format('m'), $day)])) background-color: #ffcccb; @endif">
+                                {{ $day }}
+                            </td>
+
+                            @php $firstDayOfWeek++ @endphp
+                        @endfor
+
+                        @while($firstDayOfWeek <= 7)
+                            <td></td>
+                            @php $firstDayOfWeek++ @endphp
+                        @endwhile
+                    </tr>
+                </tbody>
+            </table>
+            
+            <!-- Year Navigation -->
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <a href="?date={{ $requestedDate->copy()->subYears(2)->format('Y-m') }}" class="btn btn-sm btn-light">{{ $requestedDate->copy()->subYears(2)->format('Y') }}</a>
+                <a href="?date={{ $requestedDate->copy()->subYear()->format('Y-m') }}" class="btn btn-sm btn-light">{{ $requestedDate->copy()->subYear()->format('Y') }}</a>
+                <span class="btn btn-sm btn-warning">{{ $requestedDate->format('Y') }}</span>
+                <a href="?date={{ $requestedDate->copy()->addYear()->format('Y-m') }}" class="btn btn-sm btn-light">{{ $requestedDate->copy()->addYear()->format('Y') }}</a>
+                <a href="?date={{ $requestedDate->copy()->addYears(2)->format('Y-m') }}" class="btn btn-sm btn-light">{{ $requestedDate->copy()->addYears(2)->format('Y') }}</a>
+            </div>
+
+            <div class="d-flex justify-content-start mt-2" style="font-size: 12px;">
+                <div class="mr-3">
+                    <span style="display: inline-block; width: 12px; height: 12px; background-color: #fff3cd; margin-right: 5px;"></span>
+                    Today
+                </div>
+                <div>
+                    <span style="display: inline-block; width: 12px; height: 12px; background-color: #ffcccb; margin-right: 5px;"></span>
+                    Holiday
                 </div>
             </div>
         </div>

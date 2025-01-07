@@ -195,10 +195,10 @@
                     <div class="option-card">
                         <h3>New Student</h3>
                         <p>First time enrolling? Click here to start your journey.</p>
-                        <a href="{{ route('enrollment.create') }}" class="btn btn-primary">
+                        <a href="{{ route('register') }}" class="btn btn-primary">
                             Start New Enrollment
                         </a>
-                    </div>
+                    </div>  
 
                     <div class="option-card">
                         <h3>Existing Student</h3>
