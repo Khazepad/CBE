@@ -117,9 +117,9 @@
 
         <div class="calendar" style="background-color: #ffc107; padding: 10px; border-radius: 10px; width: 25%; margin-left: 20px;">
             @php
-                // Set default date to Monday, January 6, 2025 01:20:30 Manila time
-                $defaultDate = Carbon\Carbon::create(2025, 1, 6, 1, 20, 30, 'Asia/Manila');
+                $defaultDate = Carbon\Carbon::now('Asia/Manila');
                 $requestedDate = request('date') ? Carbon\Carbon::parse(request('date')) : $defaultDate;
+                $today = Carbon\Carbon::now('Asia/Manila')->day;
             @endphp
 
             <div class="d-flex justify-content-between align-items-center mb-2">
@@ -161,7 +161,7 @@
                                 @php $firstDayOfWeek = 1 @endphp
                             @endif
 
-                            <td style="@if($day == 6) background-color: #fff3cd; font-weight: bold; 
+                            <td style="@if($day == $today && $requestedDate->format('Y-m') == $defaultDate->format('Y-m')) background-color: #fff3cd; font-weight: bold; 
                                        @elseif(isset($holidays[sprintf('%02d-%02d', $requestedDate->format('m'), $day)])) background-color: #ffcccb; @endif">
                                 {{ $day }}
                             </td>
