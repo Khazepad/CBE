@@ -47,7 +47,7 @@
         }
         .logo {
             margin-top: -200px;
-            margin-left: 471px;
+            margin-left: 740px;
            
         }
         .container {
