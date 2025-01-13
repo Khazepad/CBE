@@ -1,6 +1,6 @@
 <?php
 
-
+use App\Http\Controllers\FileExplorerController;
 use App\Http\Middleware\EnsureStudent; 
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\ProfileController;
@@ -54,6 +54,44 @@ Route::prefix('enrollment')->name('enrollment.')->group(function () {
     Route::get('/{enrollment}/edit', [App\Http\Controllers\EnrollmentController::class, 'edit'])->name('edit');
     Route::put('/{enrollment}', [App\Http\Controllers\EnrollmentController::class, 'update'])->name('update');
     Route::delete('/{enrollment}', [App\Http\Controllers\EnrollmentController::class, 'destroy'])->name('destroy');
+});
+
+// File Explorer Routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/file-explorer/{path?}', [FileExplorerController::class, 'index'])
+        ->where('path', '.*')
+        ->name('file-explorer.index');
+
+    Route::get('/file-explorer/download/{path}', [FileExplorerController::class, 'download'])
+        ->where('path', '.*')
+        ->name('file-explorer.download');
+
+    Route::delete('/file-explorer/delete/{path}', [FileExplorerController::class, 'delete'])
+        ->where('path', '.*')
+        ->name('file-explorer.delete');
+
+    Route::get('/file-explorer/trash', [FileExplorerController::class, 'trash'])
+        ->name('file-explorer.trash');
+
+    Route::get('/file-explorer/restore/{path}', [FileExplorerController::class, 'restore'])
+        ->where('path', '.*')
+        ->name('file-explorer.restore');
+
+    Route::delete('/file-explorer/delete-permanently/{path}', [FileExplorerController::class, 'deletePermanently'])
+        ->where('path', '.*')
+        ->name('file-explorer.delete-permanently');
+
+    Route::post('/file-explorer/upload', [FileExplorerController::class, 'upload'])
+        ->name('file-explorer.upload');
+
+    Route::post('/file-explorer/create-folder', [FileExplorerController::class, 'createFolder'])
+        ->name('file-explorer.create-folder');
+
+    Route::post('/file-explorer/create-file', [FileExplorerController::class, 'createFile'])
+        ->name('file-explorer.create-file');
+
+    Route::post('/file-explorer/move', [FileExplorerController::class, 'moveFile'])
+        ->name('file-explorer.move');
 });
 
     Route::get('/officer/appointments/index', [OfficerAppointmentController::class, 'index'])->name('officer.appointments.index');

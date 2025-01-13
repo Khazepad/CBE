@@ -31,6 +31,7 @@
                         <li><a href=""><i class='bx bx-user'></i> <span>Student List</span></a></li>
                         <li><a href=""><i class='bx bx-user-pin'></i> <span>Officer List</span></a></li>
                         <li><a href=""><i class='bx bx-user-voice'></i> <span>Director List</span></a></li>
+                        
                     </ul>
                 </li>
 
@@ -43,12 +44,12 @@
                     <ul class="sidebar-submenu">
                         <li><a href="{{ route('officer.appointments.appointments-manage') }}"><i class='bx bx-calendar'></i> <span>Appointments</span></a></li>
                         <li><a href=""><i class='bx bx-line-chart'></i> <span>Reports</span></a></li>
-                        <li><a href=""><i class='bx bx-folder'></i> <span>Documents</span></a></li>
+                        <li><a href="#"><i class='bx bx-folder'></i> <span>Documents</span></a></li>
                     </ul>
                 </li>
             @endif
 
-            <li><a href="#"><i class='bx bx-file'></i> <span>Documentation</span></a></li>
+            <li><a href="{{ route('file-explorer.index') }}"><i class='bx bx-file'></i> <span>Documentation</span></a></li>
             
             @if(Auth::check() && Auth::user()->role === 'student')
                 <li><a href="#"><i class='bx bx-circle'></i> <span>Reports</span></a></li>
